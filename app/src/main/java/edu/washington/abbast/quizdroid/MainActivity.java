@@ -13,6 +13,7 @@ import java.util.*;
 public class MainActivity extends AppCompatActivity {
 
     public ArrayList<String> subjects = new ArrayList<>();
+//    public String[] subjects = {"Math", "Physics", "Marvel Super Heroes"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +29,16 @@ public class MainActivity extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.list_view);
         lv.setAdapter(adapter);
 
-        AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
+        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Intent intent = new Intent(view.getContext(), Overview.class);
+                Intent intent = new Intent(view.getContext(), OverviewQAActivity.class);
                 String subjects = (String) adapterView.getItemAtPosition(position);
                 intent.putExtra("message", subjects);
                 startActivity(intent);
             }
         };
 
-        lv.setOnItemClickListener(clickListener);
+        lv.setOnItemClickListener(listener);
     }
 }
