@@ -15,172 +15,149 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import static edu.washington.abbast.quizdroid.R.id.a_answers;
-import static edu.washington.abbast.quizdroid.R.id.answers;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class answer extends Fragment {
 
-    public int QuestionNumber;
-    public int CorrectAnswers;
-    public String SubmittedAnswer;
-    public int SelectedAnswer;
-    public int isAnswer;
-
-    protected Activity hostActivity;
-
+    private Activity hostActivity;
+    public int questionNum, correctAnswer, selectedAnswer, isAnswer;
+    public String submittedAnswer;
 
     public answer() {
         // Required empty public constructor
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            QuestionNumber = getArguments().getInt("questions");
-            CorrectAnswers = getArguments().getInt("correct");
-            SelectedAnswer = getArguments().getInt("selectedAnswer");
+        if(getArguments() != null) {
+            questionNum = getArguments().getInt("questions");
+            correctAnswer = getArguments().getInt("correct");
+            selectedAnswer = getArguments().getInt("selectedAnswer");
             isAnswer = getArguments().getInt("isAnswer");
-
         }
         hostActivity = getActivity();
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_question2, container, false);
 
-        final View rootView = inflater.inflate(R.layout.fragment_question, container, false);
+        final Button submitButton = (Button) view.findViewById(R.id.submit);
 
+       // RadioGroup answers = (RadioGroup) view.findViewById(R.id.answers);
 
-        final Button submitButton = (Button) rootView.findViewById(R.id.submit);
+        RadioButton a = (RadioButton) view.findViewById(R.id.a);
+        RadioButton b = (RadioButton) view.findViewById(R.id.b);
+        RadioButton c = (RadioButton) view.findViewById(R.id.c);
+        RadioButton d = (RadioButton) view.findViewById(R.id.d);
 
-        RadioGroup answers = (RadioGroup) rootView.findViewById(R.id.a_answers);
-
-        RadioButton a = (RadioButton) rootView.findViewById(R.id.a);
-        RadioButton b = (RadioButton) rootView.findViewById(R.id.b);
-        RadioButton c = (RadioButton) rootView.findViewById(R.id.c);
-        RadioButton d = (RadioButton) rootView.findViewById(R.id.d);
-
-
-        if (isAnswer == 1) {
+        if(isAnswer == 1) {
             a.setEnabled(false);
             b.setEnabled(false);
             c.setEnabled(false);
             d.setEnabled(false);
-
         }
 
-        if (isAnswer == 1 && QuestionNumber != 3) {
+        if(isAnswer == 1 && questionNum != 3) {
+            submitButton.setText("Next");
             submitButton.setVisibility(View.VISIBLE);
-            submitButton.setText("NEXT");
-        } else if (isAnswer == 1 && QuestionNumber == 3) {
+        } else if(isAnswer == 1 && questionNum == 3) {
+            submitButton.setText("Finish");
             submitButton.setVisibility(View.VISIBLE);
-            submitButton.setText("FINISH");
         } else {
             submitButton.setText("Submit");
             submitButton.setVisibility(View.INVISIBLE);
         }
 
-        final TextView question = (TextView) rootView.findViewById(R.id.question);
+        final TextView question = (TextView) view.findViewById(R.id.question);
 
-        if (QuestionNumber == 1) {
-            question.setText("What is 5 X 2?");
+        if(questionNum == 1) {
+            question.setText("What is 5 x 2?");
             a.setText("10");
             b.setText("6");
-            c.setText("4");
-            d.setText("8");
-
-            if (isAnswer == 1) {
-                RadioButton wrong = (RadioButton) rootView.findViewById(SelectedAnswer);
-                wrong.setTextColor(Color.RED);
-                a.setTextColor(Color.GREEN);
-
-                TextView total = (TextView) rootView.findViewById(R.id.total);
-                total.setText("You have answered " + CorrectAnswers + " out of " + QuestionNumber + " answers correctly.");
-            }
-
-        } else if (QuestionNumber == 2) {
-            question.setText("What is 5 + 3?");
-            a.setText("9");
-            b.setText("8");
-            c.setText("10");
+            c.setText("8");
             d.setText("11");
 
-            if (isAnswer == 1) {
-                RadioButton wrong = (RadioButton) rootView.findViewById(SelectedAnswer);
+            if(isAnswer == 1) {
+                RadioButton wrong = (RadioButton) view.findViewById(selectedAnswer);
+                wrong.setTextColor(Color.RED);
+                a.setTextColor(Color.GREEN);
+            }
+
+        } else if (questionNum == 2) {
+            question.setText("What is 5 + 3?");
+            a.setText("10");
+            b.setText("8");
+            c.setText("6");
+            d.setText("11");
+
+            if(isAnswer == 1) {
+                RadioButton wrong = (RadioButton) view.findViewById(selectedAnswer);
                 wrong.setTextColor(Color.RED);
                 b.setTextColor(Color.GREEN);
-
-                TextView total = (TextView) rootView.findViewById(R.id.total);
-                total.setText("You have answered " + CorrectAnswers + " out of " + QuestionNumber + " answers  correctly.");
             }
         } else {
             question.setText("What is 60 / 3?");
             a.setText("15");
-            b.setText("20");
+            b.setText("17");
             c.setText("18");
-            d.setText("17");
+            d.setText("20");
 
-            if (isAnswer == 1) {
-                RadioButton wrong = (RadioButton) rootView.findViewById(SelectedAnswer);
+            if(isAnswer == 1) {
+                RadioButton wrong = (RadioButton) view.findViewById(selectedAnswer);
                 wrong.setTextColor(Color.RED);
-                b.setTextColor(Color.GREEN);
-
-                TextView total = (TextView) rootView.findViewById(R.id.total);
-                total.setText("You have answered " + CorrectAnswers + " out of " + QuestionNumber + " answers correctly.");
+                d.setTextColor(Color.GREEN);
             }
         }
 
+        TextView total = (TextView) view.findViewById(R.id.total);
+        total.setText("You have answered " + correctAnswer + " out of " + questionNum +
+                " answers correctly.");
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isAnswer == 0) {
-                    if (QuestionNumber == 1) {
-                        if (SubmittedAnswer.toLowerCase().equals("a")) {
-                            CorrectAnswers++;
+                if(isAnswer == 0) {
+                    if(questionNum == 1) { //answers given which question it is
+                        if(submittedAnswer.toLowerCase().equals("a")) {
+                            correctAnswer++;
                         }
-                    } else if (QuestionNumber == 2) {
-                        if (SubmittedAnswer.toLowerCase().equals("b")) {
-                            CorrectAnswers++;
+                    } else if(questionNum == 2) {
+                        if(submittedAnswer.toLowerCase().equals("b")) {
+                            correctAnswer++;
                         }
-                    } else {
-                        if (SubmittedAnswer.toLowerCase().equals("b")) {
-                            CorrectAnswers++;
+                    } else { //questionNum == 3
+                        if(submittedAnswer.toLowerCase().equals("d")) {
+                            correctAnswer++;
                         }
                     }
                 }
 
-                int nextQuestion = QuestionNumber;
+                int nextQuestion = questionNum;
                 nextQuestion++;
-                if (nextQuestion <= 3) {
-                    if (hostActivity instanceof OverviewQAActivity) {
-                        ((OverviewQAActivity) hostActivity).loadQuestionFragment(nextQuestion, CorrectAnswers, SelectedAnswer, 0);
+                if(nextQuestion <= 3) {
+                    if(hostActivity instanceof all) {
+                        ((all) hostActivity).loadQuestionFragment(nextQuestion, correctAnswer, selectedAnswer, 1);
                     }
-
-                } else if (nextQuestion > 3) {
+                } else { //if nextQuestion > 3
                     Intent intent = new Intent(view.getContext(), MainActivity.class);
                     startActivity(intent);
                 }
-
             }
         });
 
 
-        return rootView;
+        // Inflate the layout for this fragment
+        return view;
     }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 }
