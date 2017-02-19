@@ -3,30 +3,45 @@ package edu.washington.abbast.quizdroid;
 import android.app.Application;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Abbas on 2/13/17.
  */
 
-public class QuizApp extends Application {
+public class QuizApp extends Application implements TopicRepository {
 
-    public static final String tag = "QuizApp";
+    private static QuizApp singleton;
+    public List<Topic> topic;
 
     public QuizApp(){
-        //Empty Constructor
+        if(singleton == null) {
+            singleton = this;
+        } else {
+            Log.e("QuizApp", "There is already a QuizApp running!");
+            throw new RuntimeException();
+        }
+        topic = new ArrayList<Topic>();
     }
 
-    private static QuizApp instance = new QuizApp();
+    //private static QuizApp instance = new QuizApp();
 
     public static QuizApp getInstance() {
-        return instance;
+        return singleton;
     }
 
-    public TopicRepository getRepo() {
-        return TopicRepository.getInstance();
-    }
+//    public TopicRepository getRepo() {
+//        return TopicRepository.getInstance();
+//    }
 
     @Override
     public void onCreate() {
-        Log.d(tag, "Loaded correcting and running.");
+        Log.d("QuizApp onCreate()", "OnCreate Loaded correctly and running.");
+    }
+
+    @Override
+    public List<Topic> getTopics() {
+        return topic;
     }
 }

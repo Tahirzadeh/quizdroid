@@ -8,27 +8,54 @@ import java.util.List;
  */
 
 public class Topic {
-    public String title;
-    public String shortDescr;
-    public String longDescr;
-    public List<Question> questions;
+
+    private String TITLE, SHORT_DESCR, LONG_DESCR;
+    private List<Question> questions;
 
     public Topic(){
-        this("");
+
     }
 
-    public Topic(String title){
-        this.title = title;
-        this.shortDescr = "Short description for " + title + " quiz.";
-        this.longDescr = "Long description for " + title + " quiz.";
-        this.questions = new ArrayList<Question>();
-        questions.add(new Question());
-        questions.add(new Question());
-        questions.add(new Question());
+    public Topic(String title, String shortDescription, String longDescription, List<Question> questions){
+        this.TITLE = title;
+        this.SHORT_DESCR = shortDescription;//"Short description for " + title + " quiz.";
+        this.LONG_DESCR = longDescription;//"Long description for " + title + " quiz.";
+        this.questions = questions;//new ArrayList<Question>();
+    }
+
+    public void setTitle(String title) {
+        this.TITLE = title;
+    }
+
+    public String getTITLE() {
+        return TITLE;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.SHORT_DESCR = shortDescription;
+    }
+
+    public String getShortDescription() {
+        return SHORT_DESCR;
+    }
+
+    public void setLongDescription(String longDescription) {
+        this.LONG_DESCR = longDescription;
+    }
+    public String getLongDescription() {
+        return LONG_DESCR;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
     }
 
     @Override
     public String toString(){
-        return this.title + ": " + this.shortDescr;
+        return this.TITLE + ": " + this.SHORT_DESCR;
     }
 }
